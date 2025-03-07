@@ -23,6 +23,15 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
+# Copy project files into container
+COPY . .
+
+# Cài đặt PHP dependencies (composer)
+RUN composer install --no-dev --optimize-autoloader
+
+# Cài đặt Node dependencies (npm)
+RUN npm install && npm run build
+
 # Expose port 9000 and start php-fpm server
 EXPOSE 9000
 CMD ["php-fpm"]
